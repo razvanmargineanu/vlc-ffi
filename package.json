@@ -1,0 +1,28 @@
+{
+  "name": "vlc-ffi",
+  "version": "0.0.5",
+  "author": {},
+  "description": "VLC FFI Bindings",
+  "keywords": [
+    "vlc"
+  ],
+  "homepage": "http://github.com/gbaumgart/vlc-ffi",
+  "bugs": {
+    "url": "http://github.com/gbaumgart/vlc-ffi/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gbaumgart/vlc-ffi.git"
+  },
+  "main": "vlc.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "ffi": "^2.1.0",
+    "ref": ">= 0.0.17",
+    "ref-struct": ">= 0.0.3",
+    "ref-union": ">= 0.0.2",
+    "semver": ">= 1.0.14"
+  }
+}
