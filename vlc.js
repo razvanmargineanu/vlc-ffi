@@ -1,10 +1,11 @@
 var os = require('os');
 var path = require('path');
-
 var FFI = require('ffi');
 var ref = require('ref');
 
 var LIBRARY_PATHS = [];
+
+var _util = require('util');
 
 switch (os.platform()) {
   case 'darwin':
@@ -69,7 +70,15 @@ var VLC = function (args) {
         mediaplayer = new MediaPlayer(instance);
       }
       return mediaplayer;
-    },
+    }
+  });
+
+  Object.defineProperty(this, 'deviceCount', {
+    get: function() {
+      var tmp = lib.libvlc_audio_output_device_count(instance,"");
+      console.log('outputs : ',_util.inspect(tmp));
+      return tmp;
+    }
   });
 
   Object.defineProperty(this, 'vlm', {
@@ -78,19 +87,38 @@ var VLC = function (args) {
         vlm = new VLM(instance);
       }
       return vlm;
-    },
+    }
   });
 
   this.release = function () {
-    if (!released) {
+    try {
+      if (!released) {
+        if (mediaplayer) {
+          mediaplayer.release();
+        }
+        if (vlm) {
+          vlm.release();
+        }
+        lib.libvlc_release(instance);
+        released = true;
+      }
+    }catch(e){
+      console.error('error releaseing',e);
+    }
+  };
+
+  this.releasePlayer = function () {
+    try {
+
       if (mediaplayer) {
         mediaplayer.release();
+        mediaplayer = null;
       }
-      if (vlm) {
-        vlm.release();
-      }
-      lib.libvlc_release(instance);
-      released = true;
+
+
+
+    }catch(e){
+      console.error('error releaseing',e);
     }
   };
 
@@ -123,7 +151,7 @@ var VLC = function (args) {
           name: tmp.psz_name,
           shortname: tmp.psz_shortname,
           longname: tmp.psz_longname,
-          help: tmp.psz_help,
+          help: tmp.psz_help
         });
         tmp = tmp.p_next;
       }
@@ -132,7 +160,7 @@ var VLC = function (args) {
         lib.libvlc_module_description_list_release(start);
 
       return ret;
-    },
+    }
   });
 
   Object.defineProperty(this, 'video_filters', {
@@ -146,7 +174,7 @@ var VLC = function (args) {
           name: tmp.psz_name,
           shortname: tmp.psz_shortname,
           longname: tmp.psz_longname,
-          help: tmp.psz_help,
+          help: tmp.psz_help
         });
         tmp = tmp.p_next;
       }
@@ -155,7 +183,7 @@ var VLC = function (args) {
         lib.libvlc_module_description_list_release(start);
 
       return ret;
-    },
+    }
   });
 };
 
