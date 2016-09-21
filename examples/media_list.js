@@ -24,11 +24,20 @@ console.error('count',list.count());
 
 var player = vlc.mediaListPlayer;
 player.list = list;
+
+//player.on('Stopped',function(e){});
+//player.on('Paused',function(e){console.log('paused',e);});
+//player.on('Playing',function(e){console.log('on playing ',e);});
+//player.on('EndReached',function(e){console.log('EndReached',e);});
+player.on('MediaListPlayerStopped',function(e){
+  console.log('Forward',e);
+});
 player.play();
 
+
 setTimeout(function(){
-  //player.next();
-},3000);
+  player.stop();
+},2000);
 
 var poller = setInterval(function () {
   
