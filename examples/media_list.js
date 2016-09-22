@@ -8,9 +8,10 @@ var vlc = require('../vlc')([
   //'--no-snapshot-preview'
 ]);
 
+var Media = require('../lib/media');
 
 var util = require('util');
-
+//https://mailman.videolan.org/pipermail/vlc-commits/2016-April/035004.html
 var list = vlc.mediaList();
 var media = vlc.mediaFromFile('/home/mc007/Music/Sasha/HeyNow.mp3');
 //var media2 = vlc.mediaFromFile('/install/emergency005.mp3');
@@ -30,17 +31,53 @@ player.list = list;
 //player.on('Playing',function(e){console.log('on playing ',e);});
 //player.on('EndReached',function(e){console.log('EndReached',e);});
 player.on('MediaListPlayerStopped',function(e){
-  console.log('Forward',e);
+  console.log('Stopped',e);
 });
+
+/*
+player.on('MediaListPlayerNextItemSet',function(e){
+  console.log('forward',e);
+});
+*/
+
+
+player.on('MediaListPlayerPlayed',function(e){
+  console.log('play');
+});
+
+
+
+player.on('MediaListPlayerNextItemSet',function(e){
+  console.log('Next');
+});
+
+/*
+player.on('PositionChanged',function(e){
+  console.log('Next');
+});
+*/
+
+
 player.play();
 
+//var _player = player.getPlayer();
 
+var _m = list.at(0);
+console.error('media ', _m.path);
+//console.dir(_m);
+
+/*
 setTimeout(function(){
-  player.stop();
-},2000);
+  player.pause();
+  setTimeout(function(){
+    player.next();
+  },2000);
+},8000);
+*/
 
 var poller = setInterval(function () {
-  
+
+  console.log(_m.position());
   return;
   try {
     if (player.video.track_count > 0) {
