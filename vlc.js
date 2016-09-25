@@ -15,17 +15,17 @@ switch (os.platform()) {
   case 'win32':
     if (process.env['ProgramFiles(x86)']) {
       LIBRARY_PATHS.push(path.join('',
-        process.env['ProgramFiles(x86)'],
-        'VideoLAN',
-        'VLC',
-        'libvlc.dll'
+          process.env['ProgramFiles(x86)'],
+          'VideoLAN',
+          'VLC',
+          'libvlc.dll'
       ));
     }
     LIBRARY_PATHS.push(path.join(
-      process.env['ProgramFiles'],
-      'VideoLAN',
-      'VLC',
-      'libvlc.dll'
+        process.env['ProgramFiles'],
+        'VideoLAN',
+        'VLC',
+        'libvlc.dll'
     ));
     break;
   default:
@@ -51,11 +51,11 @@ var VLC = function (args) {
     MediaListPlayer = require('./lib/media_list_player');
     VLM = require('./lib/vlm');
   }
- 
+
   if(!args) {
     args = [];
   }
- 
+
   var mediaplayer, vlm;
   var released = false;
 
@@ -74,6 +74,11 @@ var VLC = function (args) {
       return mediaplayer;
     }
   });
+
+  this.createPlayer = function(){
+    mediaplayer = new MediaPlayer(instance);
+    return mediaplayer;
+  };
 
   Object.defineProperty(this, 'mediaListPlayer', {
     get: function () {
@@ -114,20 +119,16 @@ var VLC = function (args) {
         released = true;
       }
     }catch(e){
-      console.error('error releaseing',e);
+      console.error('error releasing',e);
     }
   };
 
   this.releasePlayer = function () {
     try {
-
       if (mediaplayer) {
         mediaplayer.release();
         mediaplayer = null;
       }
-
-
-
     }catch(e){
       console.error('error releaseing',e);
     }
@@ -140,7 +141,7 @@ var VLC = function (args) {
   this.mediaList = function () {
     return new MediaList(instance);
   };
-  
+
   this.mediaFromUrl = function(url){
     return new Media(instance, undefined, { url: url });
   };
