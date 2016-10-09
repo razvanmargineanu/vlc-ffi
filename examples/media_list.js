@@ -8,4 +8,4 @@ var vlc = require('../vlc')([
   '--no-snapshot-preview'
 ]);
 console.log('version '+vlc.version);
-vlc.diagnose2();
+vlc.diagnose();
